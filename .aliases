@@ -12,3 +12,14 @@ alias tarcd='base=$(basename $PWD);cd ..;tar -czf $base.tar.gz $base'
 # tar current folder and place it up one directory
 alias tarcd='base=$(basename $PWD);cd ..;tar -czf $base.tar.gz $base'
 
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+
