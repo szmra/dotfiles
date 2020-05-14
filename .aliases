@@ -1,6 +1,6 @@
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
-alias ws="~/Workspace"
+alias ws="cd ~/Workspace"
 alias gd='cd "/Volumes/GoogleDrive/My Drive/"'
 alias g="git"
 
