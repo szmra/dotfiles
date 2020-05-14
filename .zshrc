@@ -2,34 +2,54 @@
 #
 # .zshrc
 #
-# @author Jeff Geerling
-#
+# borrowed from LukeSmithxyz and geerlingguy
 
-# Colors.
-unset LSCOLORS
-export CLICOLOR=1
-export CLICOLOR_FORCE=1
+# Enable colors and change prompt:
+autoload -U colors && colors
+PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
 
-# Don't require escaping globbing characters in zsh.
-unsetopt nomatch
+# History in cache directory:
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.cache/zsh/history
+if [[ ! -a "$HISTFILE" ]]; then
+    mkdir -p "$HISTFILE"
+fi
 
-# Nicer prompt.
-export PS1=$'\n'"%F{green} %*%F %3~ %F{white}$ "
+# Basic auto/tab complete:
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)		# Include hidden files.
 
-# Enable plugins.
-#plugins=(git brew history kubectl history-substring-search)
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
+# Load aliases and shortcuts if existent.
+[ -f "$HOME/.config/shortcutrc" ] && source "$HOME/.config/shortcutrc"
+[ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
 # Custom $PATH with extra locations.
 #export PATH=/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/go/bin:/usr/local/git/bin:$HOME/.composer/vendor/bin:$PATH
-
-# Bash-style time output.
-export TIMEFMT=$'\nreal\t%*E\nuser\t%*U\nsys\t%*S'
-
-# Include alias file (if present) containing aliases for ssh, etc.
-if [ -f ~/.aliases ]
-then
-  source ~/.aliases
-fi
 
 # Allow history search via up/down keys.
 #source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -37,62 +57,12 @@ fi
 #bindkey "^[[B" history-substring-search-down
 
 # Git aliases.
-alias gs='git status'
-alias gc='git commit'
-alias gp='git pull --rebase'
-alias gcam='git commit -am'
-alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+#alias gs='git status'
+#alias gc='git commit'
+#alias gp='git pull --rebase'
+#alias gcam='git commit -am'
+#alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 
-# Completions.
-autoload -Uz compinit && compinit
 # Case insensitive.
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+#zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
 
-# Git upstream branch syncer.
-# Usage: gsync master (checks out master, pull upstream, push origin).
-function gsync() {
- if [[ ! "$1" ]] ; then
-     echo "You must supply a branch."
-     return 0
- fi
-
- BRANCHES=$(git branch --list $1)
- if [ ! "$BRANCHES" ] ; then
-    echo "Branch $1 does not exist."
-    return 0
- fi
-
- git checkout "$1" && \
- git pull upstream "$1" && \
- git push origin "$1"
-}
-
-# Tell homebrew to not autoupdate every single time I run it (just once a week).
-export HOMEBREW_AUTO_UPDATE_SECS=604800
-
-# Super useful Docker container oneshots.
-# Usage: dockrun, or dockrun [centos7|fedora27|debian9|debian8|ubuntu1404|etc.]
-dockrun() {
- docker run -it geerlingguy/docker-"${1:-ubuntu1604}"-ansible /bin/bash
-}
-
-# Enter a running Docker container.
-function denter() {
- if [[ ! "$1" ]] ; then
-     echo "You must supply a container ID or name."
-     return 0
- fi
-
- docker exec -it $1 bash
- return 0
-}
-
-# Delete a given line number in the known_hosts file.
-knownrm() {
- re='^[0-9]+$'
- if ! [[ $1 =~ $re ]] ; then
-   echo "error: line number missing" >&2;
- else
-   sed -i '' "$1d" ~/.ssh/known_hosts
- fi
-}
