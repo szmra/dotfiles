@@ -1,0 +1,24 @@
+# History in cache directory:
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.cache/zsh/history
+if [[ ! -a "$HISTFILE" ]]; then
+    mkdir -p "$HISTFILE"
+fi
+
+# Basic auto/tab complete:
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)		# Include hidden files.# Basic auto/tab complete:
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)		# Include hidden files.
+
+# Load aliases and shortcuts if existent.
+[ -f "$HOME/.config/zsh/.exports" ] && source "$HOME/.config/zsh/.exports"
+[ -f "$HOME/.config/zsh/.aliases" ] && source "$HOME/.config/zsh/.aliases"
+[ -f "$HOME/.config/zsh/.functions" ] && source "$HOME/.config/zsh/.functions"
