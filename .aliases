@@ -1,3 +1,5 @@
+alias ..="cd .."
+
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias ws="cd ~/Workspace"
