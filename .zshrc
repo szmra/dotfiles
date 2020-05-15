@@ -24,3 +24,7 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 [ -f "$HOME/.config/zsh/.rc" ] && source "$HOME/.config/zsh/.rc"
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+eval "$(pipenv --completion)"
