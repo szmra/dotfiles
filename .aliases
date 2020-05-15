@@ -4,6 +4,13 @@ alias ws="cd ~/Workspace"
 alias gd='cd "/Volumes/GoogleDrive/My Drive/"'
 alias g="git"
 
+# Git aliases.
+alias gs='git status'
+alias gc='git commit'
+alias gp='git pull --rebase'
+alias gcam='git commit -am'
+alias gl='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
 # tar current folder and place it up one directory
 alias tarcd='base=$(basename $PWD);cd ..;tar -czf $base.tar.gz $base'
 
@@ -22,4 +29,3 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
-
