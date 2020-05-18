@@ -25,6 +25,7 @@ source $ZSH/oh-my-zsh.sh
 
 [ -f "$HOME/.config/zsh/.rc" ] && source "$HOME/.config/zsh/.rc"
 
+export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 eval "$(pipenv --completion)"
