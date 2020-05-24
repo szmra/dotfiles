@@ -396,10 +396,10 @@ DOTFILE_GH_DIR
 if [ ! -d "$ZSHRC_DIR" ]; then
   mkdir -p "$ZSHRC_DIR"
   unlink ~/.macos
-  #unlink ~/.rc
-  #unlink ~/.exports
-  #unlink ~/.aliases
-  #unlink ~/.functions
+  unlink ~/.rc
+  unlink ~/.exports
+  unlink ~/.aliases
+  unlink ~/.functions
   ln -s "$DOTFILE_GH_DIR/.rc" "$ZSHRC_DIR/.rc"
   ln -s "$DOTFILE_GH_DIR/.exports" "$ZSHRC_DIR/.exports"
   ln -s "$DOTFILE_GH_DIR/.aliases" "$ZSHRC_DIR/.aliases"
