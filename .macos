@@ -35,8 +35,8 @@ if [[ "$RUN_AS_ROOT" = true ]]; then
   sudo nvram SystemAudioVolume=" "
 fi
 
-# Set highlight color to gray
-defaults write NSGlobalDomain AppleHighlightColor -string "0.847059 0.847059 0.862745 Graphite"
+# Set highlight color to custom
+defaults write NSGlobalDomain AppleHighlightColor -string "0.779796 0.570875 0.918540 Other"
 
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
