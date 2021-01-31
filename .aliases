@@ -35,3 +35,6 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
+
+# Misc useful dev aliases
+alias uuid="uuidgen | tr -d '\n' | tr '[:upper:]' '[:lower:]'  | pbcopy && pbpaste && echo"
